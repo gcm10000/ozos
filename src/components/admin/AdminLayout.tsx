@@ -1,42 +1,46 @@
+// app/admin/layout.tsx
 
-import React, { useEffect } from 'react';
-import { Outlet, useNavigate, Link } from 'react-router-dom';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { LayoutDashboard, FileText, Users, LogOut, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 
-const AdminLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
-  const navigate = useNavigate();
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem('auth') || '{}');
-    
+
     if (!auth.isAuthenticated) {
-      navigate('/admin/login');
+      router.push('/admin/login');
       return;
     }
 
     if (auth.passwordChangeRequired) {
-      navigate('/admin/change-password');
+      router.push('/admin/change-password');
       return;
     }
-  }, [navigate]);
+  }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('auth');
     toast({
-      title: "Logout realizado",
-      description: "Você foi desconectado com sucesso"
+      title: 'Logout realizado',
+      description: 'Você foi desconectado com sucesso'
     });
-    navigate('/admin/login');
+    router.push('/admin/login');
   };
 
   const navItems = [
     { label: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/admin/dashboard' },
     { label: 'Posts', icon: <FileText size={20} />, path: '/admin/posts' },
-    { label: 'Usuários', icon: <Users size={20} />, path: '/admin/users' },
+    { label: 'Usuários', icon: <Users size={20} />, path: '/admin/users' }
   ];
 
   const toggleSidebar = () => {
@@ -62,13 +66,13 @@ const AdminLayout = () => {
         <div className="p-4 border-b border-blue-800">
           <h1 className="font-bold text-xl hidden md:block">Painel Admin</h1>
         </div>
-        
+
         <nav className="py-4">
           <ul>
             {navItems.map((item, index) => (
               <li key={index}>
-                <Link 
-                  to={item.path}
+                <Link
+                  href={item.path}
                   className="flex items-center gap-3 px-4 py-3 hover:bg-ozos-blue transition-colors"
                   onClick={() => setSidebarOpen(false)}
                 >
@@ -77,9 +81,9 @@ const AdminLayout = () => {
                 </Link>
               </li>
             ))}
-            
+
             <li>
-              <button 
+              <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-ozos-blue transition-colors text-left"
               >
@@ -94,11 +98,9 @@ const AdminLayout = () => {
       {/* Main Content */}
       <div className="flex-grow">
         <main className="p-6">
-          <Outlet />
+          {children}
         </main>
       </div>
     </div>
   );
-};
-
-export default AdminLayout;
+}
