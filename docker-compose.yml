@@ -8,8 +8,8 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - VIRTUAL_HOST=ozos.com.br
-      - LETSENCRYPT_HOST=ozos.com.br
+      - VIRTUAL_HOST=teste.ozos.com.br
+      - LETSENCRYPT_HOST=teste.ozos.com.br
       - LETSENCRYPT_EMAIL=gabrielc.machado@hotmail.com
       - VIRTUAL_PORT=3000
     networks:
