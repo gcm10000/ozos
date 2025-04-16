@@ -12,6 +12,7 @@ services:
       - LETSENCRYPT_HOST=ozos.com.br
       - LETSENCRYPT_EMAIL=gabrielc.machado@hotmail.com
       - VIRTUAL_PORT=3000
+      - NODE_ENV=production
     networks:
       - nginx-net
     restart: always
