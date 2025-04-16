@@ -10,10 +10,10 @@ RUN npm install
 # Copia todos os arquivos do projeto (incluindo o .env)
 COPY . .
 
-# ✅ Copia o .env.production explicitamente para garantir que o Next.js leia
-COPY .env.production .env.production
+# ✅ Copia o .env.production.local explicitamente para garantir que o Next.js leia
+COPY .env.production.local .env.production.local
 
-# Roda o build do Next.js, que agora usará as variáveis do .env.production
+# Roda o build do Next.js, que agora usará as variáveis do .env.production.local
 RUN npm run build --no-lint
 
 # Etapa 2: Runtime
