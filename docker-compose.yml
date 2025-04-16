@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  nextjs-app:
+    container_name: meu-nextjs
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - nginx-net
+    restart: always
+    labels:
+      - "com.github.nginx-proxy.container=true"
+      - "VIRTUAL_HOST=ozos.com.br"
+      - "LETSENCRYPT_HOST=ozos.com.br"
+      - "LETSENCRYPT_EMAIL=gabrielc.machado@hotmail.com"
+      - VIRTUAL_PORT=3000
+
+networks:
+  nginx-net:
+    external: true
