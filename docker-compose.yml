@@ -7,7 +7,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      # - NODE_ENV=production
       - VIRTUAL_HOST=ozos.com.br
       - LETSENCRYPT_HOST=ozos.com.br
       - LETSENCRYPT_EMAIL=gabrielc.machado@hotmail.com
