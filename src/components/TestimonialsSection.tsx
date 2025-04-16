@@ -1,22 +1,21 @@
-
 import React, { useEffect, useState } from 'react';
 import { Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    content: "Ozos transformed my online presence with a stunning portfolio website. The attention to detail and technological innovation truly sets them apart.",
+    content: "A Ozos transformou minha presença online com um site de portfólio deslumbrante. A atenção aos detalhes e a inovação tecnológica realmente os diferenciam.",
     author: "Sarah Johnson",
-    position: "Photographer",
+    position: "Fotógrafa",
   },
   {
-    content: "Working with Ozos was a breeze. They understood exactly what our architecture firm needed and delivered a portfolio that perfectly showcases our work.",
+    content: "Trabalhar com a Ozos foi super fácil. Eles entenderam exatamente o que nosso escritório de arquitetura precisava e entregaram um portfólio que mostra perfeitamente nosso trabalho.",
     author: "Michael Chen",
-    position: "Architect",
+    position: "Arquiteto",
   },
   {
-    content: "As a freelance designer, my portfolio is everything. Ozos created a website that not only looks amazing but has helped me land new clients consistently.",
+    content: "Como designer freelancer, meu portfólio é tudo. A Ozos criou um site que não só ficou incrível, como também me ajudou a conquistar novos clientes com frequência.",
     author: "Julia Rivera",
-    position: "Graphic Designer",
+    position: "Designer Gráfica",
   },
 ];
 
@@ -52,9 +51,9 @@ const TestimonialsSection = () => {
     <section id="testimonials" className="py-20 text-white bg-ozos-navy">
       <div className="container">
         <div className="text-center">
-          <h2 className="reveal section-heading text-white">What Our Clients Say</h2>
+          <h2 className="reveal section-heading text-white">O Que Nossos Clientes Dizem</h2>
           <p className="reveal section-subheading max-w-3xl mx-auto text-blue-100">
-            Hear from professionals and businesses who have transformed their online presence with Ozos.
+            Veja o que dizem profissionais e empresas que transformaram sua presença online com a Ozos.
           </p>
         </div>
 

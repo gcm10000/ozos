@@ -8,33 +8,21 @@ import { useRouter } from 'next/navigation';
 import { LayoutDashboard, FileText, Users, LogOut, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { authService } from '@/services/clientside';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
-  useEffect(() => {
-    const auth = JSON.parse(localStorage.getItem('auth') || '{}');
-
-    if (!auth.isAuthenticated) {
-      router.push('/admin/login');
-      return;
-    }
-
-    if (auth.passwordChangeRequired) {
-      router.push('/admin/change-password');
-      return;
-    }
-  }, [router]);
-
   const handleLogout = () => {
-    localStorage.removeItem('auth');
+    authService.logout();
+
     toast({
       title: 'Logout realizado',
       description: 'Você foi desconectado com sucesso'
     });
-    router.push('/admin/login');
+    router.push('/admin-login');
   };
 
   const navItems = [

@@ -1,24 +1,31 @@
+"use client"
 
 import React, { useEffect } from 'react';
-import { Code, Layout, Smartphone } from 'lucide-react';
+import { Code, Layout, Newspaper, Search, Smartphone } from 'lucide-react';
+import { Button } from './ui/button';
+import Link from 'next/link';
 
 const services = [
   {
     icon: <Layout className="w-12 h-12 text-ozos-blue" />,
-    title: "Portfolio Design",
-    description: "Custom-designed portfolio websites that showcase your work beautifully and effectively.",
+    title: "Design de Portfólio",
+    description: "Sites de portfólio personalizados que exibem seu trabalho de forma bonita e eficaz.",
+    link: "/services/portfolio-design"
   },
   {
-    icon: <Code className="w-12 h-12 text-ozos-blue" />,
-    title: "Development",
-    description: "Clean, optimized code that ensures your website loads quickly and functions flawlessly.",
+    icon: <Search className="w-12 h-12 text-ozos-blue" />,
+    title: "Otimização de SEO",
+    description: "Melhore sua visibilidade nos mecanismos de busca e atraia visitantes mais qualificados para seu site.",
+    link: "/services/seo-optimization"
   },
   {
-    icon: <Smartphone className="w-12 h-12 text-ozos-blue" />,
-    title: "Responsive Design",
-    description: "Websites that look and work perfectly on all devices, from desktop to mobile.",
-  },
+    icon: <Newspaper className="w-12 h-12 text-ozos-blue" />,
+    title: "Criação de Blog",
+    description: "Plataformas de blog personalizadas com publicações automáticas para manter uma presença online consistente.",
+    link: "/services/blog-creation"
+  }
 ];
+
 
 const ServicesSection = () => {
   useEffect(() => {
@@ -42,9 +49,9 @@ const ServicesSection = () => {
     <section id="services" className="py-20 bg-white">
       <div className="container">
         <div className="text-center">
-          <h2 className="reveal section-heading">Our Services</h2>
+          <h2 className="reveal section-heading">Nossos Serviços</h2>
           <p className="reveal section-subheading max-w-3xl mx-auto">
-            We offer comprehensive portfolio website services tailored to your specific needs.
+            Oferecemos serviços completos de websites de portfólio adaptados às suas necessidades específicas.
           </p>
         </div>
 
@@ -60,6 +67,9 @@ const ServicesSection = () => {
               </div>
               <h3 className="mb-3 text-xl font-semibold">{service.title}</h3>
               <p className="text-gray-600">{service.description}</p>
+              <Button asChild variant="outline" className="mt-auto w-full">
+                <Link href={service.link}>Saiba mais</Link>
+              </Button>
             </div>
           ))}
         </div>

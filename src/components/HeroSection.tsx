@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 const HeroSection = () => {
   useEffect(() => {
@@ -33,12 +34,16 @@ const HeroSection = () => {
             Ajudamos empresas e profissionais a exibir seu trabalho com sites de portfólio modernos, responsivos e tecnologicamente avançados.
           </p>
           <div className="reveal flex flex-col items-center justify-center gap-4 mt-10 sm:flex-row">
-            <Button className="w-full sm:w-auto bg-ozos-blue hover:bg-blue-600 text-white">
-              Ver Nosso Trabalho
-            </Button>
-            <Button variant="outline" className="w-full sm:w-auto border-ozos-blue text-ozos-blue hover:bg-ozos-blue/10">
-              Fale Conosco <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <Link href="/#portfolio">
+              <Button className="w-full sm:w-auto bg-ozos-blue hover:bg-blue-600 text-white">
+                Ver Nosso Trabalho
+              </Button>
+            </Link>
+            <Link href="/#contact">
+              <Button variant="outline" className="w-full sm:w-auto border-ozos-blue text-ozos-blue hover:bg-ozos-blue/10">
+                Fale Conosco <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
