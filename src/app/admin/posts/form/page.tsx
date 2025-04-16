@@ -45,7 +45,7 @@ const PostForm = () => {
             excerpt: existingPost.excerpt,
             content: existingPost.content,
             image: existingPost.image || '/placeholder.svg',
-            status: existingPost.status,
+            status: existingPost.status as string,
             categories: existingPost.categories || [],
           });
           setOriginalImage(existingPost.image || '/placeholder.svg');

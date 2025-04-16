@@ -19,7 +19,12 @@ const PostList = async ({ searchParams }: PostListProps) => {
   const currentPage = parseInt(page || '1', 10);
   const pageSize = 10;
 
-  const { data, totalPages } = await postService.getPosts({ page: 1, limit: pageSize, search: search.toLowerCase(), status: status === 'all' ? undefined : status  });
+  const { data, totalPages } = await postService.getPosts({ 
+    page: 1, 
+    limit: pageSize, 
+    search: search.toLowerCase(), 
+    status: status === 'all' ? undefined : status  
+  });
 
   return (
     <div>

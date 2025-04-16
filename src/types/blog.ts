@@ -11,7 +11,7 @@ export interface Post {
   authorId: number;
   categories: string[];
   date: string;
-  status: PostStatus;
+  status?: PostStatus;
   createdAt: string;
   updatedAt: string;
 }

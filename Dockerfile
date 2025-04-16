@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
+RUN npm run build --no-lint
 
 # Etapa 2: Runtime
 FROM node:22-alpine

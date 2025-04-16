@@ -57,6 +57,9 @@ class ApiService {
 
       const errorData = await response.json().catch(() => ({}));
 
+      if (response.status == 401)
+        redirect('/admin-login');
+
       if (response.status == 403)
         redirect('/403');
       
