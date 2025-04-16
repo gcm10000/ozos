@@ -2,7 +2,6 @@ import { API_CONFIG, TenancyId } from '@/config/api';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-
 class ApiError extends Error {
   status: number;
   data: any;
@@ -30,6 +29,9 @@ class ApiService {
     
     if (authToken) {
       headers['Authorization'] = `Bearer ${authToken}`;
+      console.log("Token de autenticação adicionado nos headers");
+    } else {
+      console.warn("Nenhum token de autenticação encontrado nos cookies");
     }
     
     return headers;
@@ -38,31 +40,44 @@ class ApiService {
   // Método para obter o token de autenticação dos cookies usando cookie-js
   private async getAuthTokenFromCookies(): Promise<string | null> {
     const cookieStore = await cookies();
-    return cookieStore.get('access_token')?.value || null;  // Retorna o token armazenado no cookie, ou null se não existir
+    const token = cookieStore.get('access_token')?.value || null;
+    
+    if (token) {
+      console.log("Token de autenticação encontrado nos cookies");
+    } else {
+      console.warn("Token de autenticação não encontrado nos cookies");
+    }
+    
+    return token;
   }
 
   private buildUrl(endpoint: string, addTenancy: boolean = true): string {
     const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  
-    if (addTenancy) {
-      return `${this.baseURL}/${TenancyId}${normalizedEndpoint}`;
-    }
-  
-    return `${this.baseURL}${normalizedEndpoint}`;
+    const url = addTenancy ? `${this.baseURL}/${TenancyId}${normalizedEndpoint}` : `${this.baseURL}${normalizedEndpoint}`;
+    
+    console.log("URL construída:", url);
+    return url;
   }
 
   private async handleResponse(response: Response): Promise<any> {
+    console.log("Resposta recebida:", response.status);
+    
     if (!response.ok) {
       if (response.status === 404) return null;
 
       const errorData = await response.json().catch(() => ({}));
 
-      if (response.status == 401)
+      if (response.status == 401) {
+        console.error("Erro de autenticação. Redirecionando para login...");
         redirect('/admin-login');
+      }
 
-      if (response.status == 403)
+      if (response.status == 403) {
+        console.error("Acesso proibido. Redirecionando para a página 403...");
         redirect('/403');
-      
+      }
+
+      console.error("Erro na requisição:", errorData);
       throw new ApiError(
         errorData.message || `Erro na requisição: ${response.status}`,
         response.status,
@@ -70,12 +85,19 @@ class ApiService {
       );
     }
 
-    if (response.status === 204) return {};
+    if (response.status === 204) {
+      console.log("Nenhum conteúdo retornado.");
+      return {};
+    }
 
     try {
-      return await response.json();
+      const data = await response.json();
+      console.log("Dados retornados:", data);
+      return data;
     } catch (error) {
-      return await response.text();
+      const text = await response.text();
+      console.log("Texto retornado:", text);
+      return text;
     }
   }
 
@@ -92,6 +114,8 @@ class ApiService {
       url += `?${queryParams.toString()}`;
     }
 
+    console.log("Fazendo requisição GET para URL:", url);
+
     const response = await fetch(url, {
       method: 'GET',
       cache: 'no-store',
@@ -103,7 +127,12 @@ class ApiService {
   }
 
   async post<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+    const url = this.buildUrl(endpoint, addTenancy);
+    
+    console.log("Fazendo requisição POST para URL:", url);
+    console.log("Dados enviados:", data);
+
+    const response = await fetch(url, {
       method: 'POST',
       cache: 'no-store',
       headers: await this.getHeaders(),
@@ -115,7 +144,12 @@ class ApiService {
   }
 
   async put<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+    const url = this.buildUrl(endpoint, addTenancy);
+
+    console.log("Fazendo requisição PUT para URL:", url);
+    console.log("Dados enviados:", data);
+
+    const response = await fetch(url, {
       method: 'PUT',
       cache: 'no-store',
       headers: await this.getHeaders(),
@@ -127,7 +161,12 @@ class ApiService {
   }
 
   async patch<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+    const url = this.buildUrl(endpoint, addTenancy);
+
+    console.log("Fazendo requisição PATCH para URL:", url);
+    console.log("Dados enviados:", data);
+
+    const response = await fetch(url, {
       method: 'PATCH',
       cache: 'no-store',
       headers: await this.getHeaders(),
@@ -139,7 +178,11 @@ class ApiService {
   }
 
   async delete<T>(endpoint: string, addTenancy: boolean = true): Promise<T> {
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+    const url = this.buildUrl(endpoint, addTenancy);
+
+    console.log("Fazendo requisição DELETE para URL:", url);
+
+    const response = await fetch(url, {
       method: 'DELETE',
       cache: 'no-store',
       headers: await this.getHeaders(),

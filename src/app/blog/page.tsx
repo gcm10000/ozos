@@ -1,4 +1,3 @@
-// app/blog/page.tsx
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
@@ -14,9 +13,33 @@ interface BlogPageProps {
   };
 }
 
+async function fetchPosts(search?: string) {
+  console.log("Buscando posts com o termo de pesquisa:", search);
+
+  try {
+    console.log("Iniciando requisição para obter os posts...");
+    
+    // Faz a requisição ao serviço de posts
+    const response = await postService.getPosts({ search });
+
+    console.log("Posts recebidos com sucesso:", response.data);
+
+    return response.data;  // Retorna os posts recebidos
+  } catch (error) {
+    console.error("Erro ao obter os posts:", error);
+    return [];  // Retorna um array vazio em caso de erro
+  }
+}
+
 export default async function Blog({ searchParams }: BlogPageProps) {
   const { search } = await searchParams;
-  const { data: posts } = await postService.getPosts({ search });
+
+  // Atribui posts com o resultado do método fetchPosts
+  const posts = await fetchPosts(search);
+
+  if (posts.length === 0) {
+    console.log("Nenhum post encontrado para a pesquisa:", search);
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
