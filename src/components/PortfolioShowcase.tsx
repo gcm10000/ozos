@@ -86,7 +86,7 @@ const PortfolioShowcase = () => {
                                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 bg-ozos-blue/80 opacity-0 group-hover:opacity-100">
-                                    <Link href={item.link}>
+                                    <Link href={item.link} target="_blank" rel="noopener noreferrer">
                                         <Button className="bg-white text-ozos-blue hover:bg-white/90">
                                             Ver Projeto <ExternalLink className="w-4 h-4 ml-2" />
                                         </Button>
