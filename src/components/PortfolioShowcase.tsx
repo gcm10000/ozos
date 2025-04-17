@@ -10,37 +10,37 @@ const portfolioItems = [
         title: "Bella Beauty",
         category: "Estética",
         image: "/portfolios/bellabeauty.png",
-        link: "bellabeauty.ozos.com.br",
+        link: "https://bellabeauty.ozos.com.br",
     },
     {
         title: "Brow Beauty",
         category: "Estética",
         image: "/portfolios/browbeauty.png",
-        link: "browbeauty.ozos.com.br",
+        link: "https://browbeauty.ozos.com.br",
     },
     {
         title: "Doces Delicias",
         category: "Confeitaria",
         image: "/portfolios/docesdelicias.png",
-        link: "docesdelicias.ozos.com.br",
+        link: "https://docesdelicias.ozos.com.br",
     },
     {
         title: "Nail Artista",
         category: "Estética",
         image: "/portfolios/nailartista.png",
-        link: "nailartista.ozos.com.br",
+        link: "https://nailartista.ozos.com.br",
     },
     {
         title: "Pedra Perfeita",
         category: "Alvenaria",
         image: "/portfolios/pedra-perfeita.png",
-        link: "pedra-perfeita.ozos.com.br",
+        link: "https://pedra-perfeita.ozos.com.br",
     },
     {
         title: "Serralheria GJM",
         category: "Negócios",
         image: "/portfolios/serralheria-gjm.png",
-        link: "serralheria-gjm.ozos.com.br",
+        link: "https://serralheria-gjm.ozos.com.br",
     },
 ];
 
