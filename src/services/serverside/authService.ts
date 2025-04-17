@@ -11,6 +11,7 @@ export interface LoginResponse {
   access_token: string;
   refresh_token: string;
   user: User;
+  clientId: number;
 }
 
 export interface RefreshTokenRequest {
@@ -35,7 +36,7 @@ export interface ChangePasswordResponse {
 
 class AuthService {
   login = async (credentials: LoginRequest, ctx?: any): Promise<LoginResponse> => {
-    const response = await apiService.post<LoginResponse>('/auth/login', true, credentials);
+    const response = await apiService.post<LoginResponse>('/api/v1/auth/login', false, credentials);
 
     const cookieStore = await cookies();
 
@@ -52,6 +53,14 @@ class AuthService {
       path: '/',
       secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 24 * 7, // 7 dias
+    });
+
+    // Configuração de cookies no lado do servidor utilizando cookies do Next.js
+    cookieStore.set('clientId', response.clientId.toString(), {
+      httpOnly: true,
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24, // 1 dia
     });
 
     cookieStore.set('user', JSON.stringify(response.user), {
@@ -89,10 +98,11 @@ class AuthService {
 
     return !!accessTokenCookie;
   };
+    
 
   async me(): Promise<User | null> {
     try {
-      const user = await apiService.get<User>('/auth/me', true);
+      const user = await apiService.get<User>('/api/v1/auth/me', false);
       return user;
     } catch (error) {
       console.error('Erro ao buscar usuário logado:', error);

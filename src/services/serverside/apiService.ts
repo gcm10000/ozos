@@ -1,4 +1,4 @@
-import { API_CONFIG, TenancyId } from '@/config/api';
+import { API_CONFIG } from '@/config/api';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -51,12 +51,27 @@ class ApiService {
     return token;
   }
 
-  private buildUrl(endpoint: string, addTenancy: boolean = true): string {
+  private async buildUrl(endpoint: string, addTenancy: boolean = true): Promise<string> {
     const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    const url = addTenancy ? `${this.baseURL}/${TenancyId}${normalizedEndpoint}` : `${this.baseURL}${normalizedEndpoint}`;
+    const clientId = await this.getClientId();
+
+    const url = addTenancy ? `${this.baseURL}/${clientId}${normalizedEndpoint}` : `${this.baseURL}${normalizedEndpoint}`;
     
     console.log("URL construída:", url);
     return url;
+  }
+
+  
+  private async getClientId(): Promise<string | null> {
+    const cookieStore = await cookies();
+    const cookieData = cookieStore.getAll(); // Acessando todos os cookies
+
+    const clientId = cookieData.find(cookie => cookie.name === 'clientId');
+    if (!clientId)
+      return null;
+
+    console.log('clientId', clientId);
+    return clientId.value;
   }
 
   private async handleResponse(response: Response): Promise<any> {
@@ -102,7 +117,7 @@ class ApiService {
   }
 
   async get<T>(endpoint: string, addTenancy: boolean = true, params?: Record<string, any>): Promise<T> {
-    let url = this.buildUrl(endpoint, addTenancy);
+    let url = await this.buildUrl(endpoint, addTenancy);
 
     if (params && Object.keys(params).length > 0) {
       const queryParams = new URLSearchParams();
@@ -127,7 +142,7 @@ class ApiService {
   }
 
   async post<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
-    const url = this.buildUrl(endpoint, addTenancy);
+    const url = await this.buildUrl(endpoint, addTenancy);
     
     console.log("Fazendo requisição POST para URL:", url);
     console.log("Dados enviados:", data);
@@ -144,7 +159,7 @@ class ApiService {
   }
 
   async put<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
-    const url = this.buildUrl(endpoint, addTenancy);
+    const url = await this.buildUrl(endpoint, addTenancy);
 
     console.log("Fazendo requisição PUT para URL:", url);
     console.log("Dados enviados:", data);
@@ -161,7 +176,7 @@ class ApiService {
   }
 
   async patch<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
-    const url = this.buildUrl(endpoint, addTenancy);
+    const url = await this.buildUrl(endpoint, addTenancy);
 
     console.log("Fazendo requisição PATCH para URL:", url);
     console.log("Dados enviados:", data);
@@ -178,7 +193,7 @@ class ApiService {
   }
 
   async delete<T>(endpoint: string, addTenancy: boolean = true): Promise<T> {
-    const url = this.buildUrl(endpoint, addTenancy);
+    const url = await this.buildUrl(endpoint, addTenancy);
 
     console.log("Fazendo requisição DELETE para URL:", url);
 

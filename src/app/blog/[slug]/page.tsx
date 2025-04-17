@@ -27,7 +27,7 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow py-16">
+      <main className="flex-grow my-16 py-16">
         <article className="container max-w-4xl mx-auto">
           <Link href="/blog" passHref>
             <div className="inline-flex items-center text-ozos-blue mb-8 hover:underline">

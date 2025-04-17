@@ -57,7 +57,7 @@ class PostService {
    * Obtém a lista de posts com paginação e filtros
    */
   async getPosts(params?: PostListParams): Promise<PostListResponse> {
-    return apiService.get<PostListResponse>(`/posts}`, true, params);
+    return apiService.get<PostListResponse>(`/posts`, true, params);
   }
 
   /**

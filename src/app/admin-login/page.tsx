@@ -23,10 +23,11 @@ const Login = () => {
       const response = await authService.login({ username, password });
 
       // Supondo que o response contém tokens e user
-      const { access_token, refresh_token, user } = response;
+      const { access_token, refresh_token, user, clientId } = response;
 
       // Armazenando os dados no cookie
       Cookies.set('access_token', access_token, { expires: 1 }); // expira em 1 dia
+      Cookies.set('clientId', clientId.toString(), { expires: 1 }); // expira em 1 dia
       Cookies.set('refresh_token', refresh_token, { expires: 7 }); // expira em 7 dias
       Cookies.set('user', JSON.stringify(user), { expires: 1 });
 

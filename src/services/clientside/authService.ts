@@ -12,6 +12,7 @@ export interface LoginResponse {
   access_token: string;
   refresh_token: string;
   user: User;
+  clientId: number;
 }
 
 export interface RefreshTokenRequest {
@@ -35,14 +36,19 @@ export interface ChangePasswordResponse {
 
 class AuthService {
     async login(credentials: LoginRequest): Promise<LoginResponse> {
-      const response = await apiService.post<LoginResponse>('/auth/login', true, credentials);
+      const response = await apiService.post<LoginResponse>('/api/v1/auth/login', false, credentials);
       // Salva tokens e user nos cookies
-      if (response.access_token)
+      if (response.access_token){
         Cookies.set('access_token', response.access_token, { secure: true });
+      }
+
       if (response.refresh_token)
         Cookies.set('refresh_token', response.refresh_token, { secure: true });
       Cookies.set('user', JSON.stringify(response.user), { secure: true });
-  
+      
+      if (response.clientId)
+        Cookies.set('clientId', response.clientId.toString(), { secure: true });
+      
       return response;
     }
   
@@ -50,7 +56,7 @@ class AuthService {
       const refreshToken = Cookies.get('refresh_token');
       if (!refreshToken) return null;
   
-      const response = await apiService.post<RefreshTokenResponse>('/auth/refresh', true, {
+      const response = await apiService.post<RefreshTokenResponse>('/api/v1/auth/refresh', false, {
         refresh_token: refreshToken
       });
   
@@ -62,7 +68,7 @@ class AuthService {
     }
   
     async changePassword(data: ChangePasswordRequest): Promise<ChangePasswordResponse> {
-      return apiService.post<ChangePasswordResponse>('/auth/change-password', true, data);
+      return apiService.post<ChangePasswordResponse>('/api/v1/auth/change-password', false, data);
     }
   
     logout(): void {
@@ -89,7 +95,7 @@ class AuthService {
   
     async me(): Promise<User | null> {
       try {
-        const user = await apiService.get<User>('/auth/me', true);
+        const user = await apiService.get<User>('/api/v1/auth/me', false);
   
         // Atualiza o cookie do usuário
         Cookies.set('user', JSON.stringify(user), { secure: true });

@@ -1,4 +1,4 @@
-import { API_CONFIG, TenancyId } from '@/config/api';
+import { API_CONFIG } from '@/config/api';
 import Cookies from 'js-cookie';  // Importa a biblioteca cookie-js
 
 class ApiError extends Error {
@@ -36,7 +36,6 @@ class ApiService {
     console.log('Headers configurados:', headers);
     return headers;
   }
-  
 
   // Método para obter o token de autenticação dos cookies usando cookie-js
   private getAuthTokenFromCookies(): string | null {
@@ -48,10 +47,18 @@ class ApiService {
   // Método para construir a URL completa
   private buildUrl(endpoint: string, addTenancy: boolean = true): string {
     const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  
-    const url = addTenancy ? `${this.baseURL}/${TenancyId}${normalizedEndpoint}` : `${this.baseURL}${normalizedEndpoint}`;
+    const clientId = this.getClientId();
+    const url = addTenancy ? `${this.baseURL}/${clientId}${normalizedEndpoint}` : `${this.baseURL}${normalizedEndpoint}`;
     console.log('URL construída:', url);
     return url;
+  }
+
+  getClientId(): string | null {
+    const clientId = Cookies.get('clientId');
+    if (!clientId)
+      return null;
+
+    return clientId;
   }
 
   // Método para processar a resposta da API

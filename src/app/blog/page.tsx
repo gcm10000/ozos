@@ -20,7 +20,7 @@ async function fetchPosts(search?: string) {
     console.log("Iniciando requisição para obter os posts...");
     
     // Faz a requisição ao serviço de posts
-    const response = await postService.getPosts({ search });
+    const response = await postService.getPublicPosts({ search });
 
     console.log("Posts recebidos com sucesso:", response.data);
 
