@@ -102,7 +102,7 @@ class AuthService {
 
   async me(): Promise<User | null> {
     try {
-      const user = await apiService.get<User>('/api/v1/auth/me', false);
+      const user = await apiService.get<User>('/auth/me', false);
       return user;
     } catch (error) {
       console.error('Erro ao buscar usuário logado:', error);

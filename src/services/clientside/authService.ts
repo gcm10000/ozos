@@ -36,7 +36,7 @@ export interface ChangePasswordResponse {
 
 class AuthService {
     async login(credentials: LoginRequest): Promise<LoginResponse> {
-      const response = await apiService.post<LoginResponse>('/api/v1/auth/login', false, credentials);
+      const response = await apiService.post<LoginResponse>('/auth/login', false, credentials);
       // Salva tokens e user nos cookies
       if (response.access_token){
         Cookies.set('access_token', response.access_token, { secure: true });
@@ -95,7 +95,7 @@ class AuthService {
   
     async me(): Promise<User | null> {
       try {
-        const user = await apiService.get<User>('/api/v1/auth/me', false);
+        const user = await apiService.get<User>('/auth/me', false);
   
         // Atualiza o cookie do usuário
         Cookies.set('user', JSON.stringify(user), { secure: true });
