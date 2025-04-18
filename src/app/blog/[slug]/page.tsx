@@ -35,9 +35,8 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
               Voltar para o blog
             </div>
           </Link>
-
           <img
-            src={imageUrl ?? '/placeholder.svg'}
+            src={imageUrl === ''  ? '/placeholder.svg' : imageUrl}
             alt={post.title}
             className="w-full h-64 md:h-96 object-cover rounded-lg mb-8"
           />
