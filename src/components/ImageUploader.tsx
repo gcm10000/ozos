@@ -1,9 +1,10 @@
-import React, { useState, useRef, DragEvent } from 'react';
+import React, { useState, useRef, DragEvent, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Upload, Link, Image, X } from 'lucide-react';
+import buildUrl from '@/app/helpers/buildURL';
 
 interface ImageUploaderProps {
     imageUrl: string;
@@ -11,14 +12,29 @@ interface ImageUploaderProps {
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onImageChange }) => {
+  
+  if (imageUrl !== '/placeholder.svg') {
+    imageUrl = buildUrl(imageUrl);
+  }
   const [isUrlMode, setIsUrlMode] = useState(!!imageUrl && imageUrl !== '/placeholder.svg');
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    imageUrl && imageUrl !== '/placeholder.svg' ? imageUrl : null
-  );
+
+  const getValidImageUrl = (url: string) => {
+    return url && url !== '/placeholder.svg' ? buildUrl(url) : null;
+  };
+
+  const [imagePreview, setImagePreview] = useState<string | null>(getValidImageUrl(imageUrl));
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+
+  useEffect(() => {
+    const validUrl = getValidImageUrl(imageUrl);
+    setImagePreview(validUrl);
+    setIsUrlMode(!!validUrl);
+  }, [imageUrl]);
+
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debugger;
     const url = e.target.value;
     onImageChange(url);
     setImagePreview(url || null);
@@ -34,6 +50,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onImageChange }
       alert('O tamanho máximo de arquivo é 5MB.');
       return;
     }
+    debugger;
   
     setImagePreview(URL.createObjectURL(file)); // mostra preview
     onImageChange(file); // envia o File pro componente pai
@@ -69,6 +86,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onImageChange }
   };
 
   const clearImage = () => {
+    debugger;
+
     setImagePreview(null);
     onImageChange('/placeholder.svg');
     if (fileInputRef.current) {
@@ -136,6 +155,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onImageChange }
               className="w-full h-full object-cover"
               onError={() => {
                 if (isUrlMode) {
+    debugger;
+
                   setImagePreview(null);
                 }
               }}

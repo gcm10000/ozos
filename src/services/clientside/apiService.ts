@@ -1,5 +1,7 @@
 import { API_CONFIG } from '@/config/api';
 import Cookies from 'js-cookie';  // Importa a biblioteca cookie-js
+import { useLoadingStore } from '@/stores/useLoadingStore';
+
 
 class ApiError extends Error {
   status: number;
@@ -13,10 +15,23 @@ class ApiError extends Error {
   }
 }
 
+type LoadingCallback = (loading: boolean) => void;
+
 // Classe base para requisições HTTP
 class ApiService {
   private baseURL: string;
   private defaultHeaders: Record<string, string>;
+  private loadingCallback?: LoadingCallback;
+
+  setLoadingCallback(callback: LoadingCallback) {
+    this.loadingCallback = callback;
+  }
+
+  private setLoadingState(state: boolean) {
+    if (this.loadingCallback) {
+      this.loadingCallback(state);
+    }
+  }
 
   constructor() {
     this.baseURL = API_CONFIG.baseURL;
@@ -107,13 +122,19 @@ class ApiService {
     
     console.log('Fazendo requisição GET para:', url);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: this.getHeaders(),
-      credentials: 'include'
-    });
-    
-    return this.handleResponse(response);
+    try {
+        this.setLoadingState(true);
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: this.getHeaders(),
+          credentials: 'include'
+        });
+        
+        return this.handleResponse(response);
+    } finally {
+      this.setLoadingState(false);
+    }
+
   }
 
   // Método POST
@@ -128,14 +149,20 @@ class ApiService {
   
     console.log('Fazendo requisição POST para:', this.buildUrl(endpoint, addTenancy), 'com dados:', data);
 
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
-      method: 'POST',
-      headers,
-      body: isFormData ? data : JSON.stringify(data),
-      credentials: 'include'
-    });
-  
-    return this.handleResponse(response);
+    try {
+      this.setLoadingState(true);
+      const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+        method: 'POST',
+        headers,
+        body: isFormData ? data : JSON.stringify(data),
+        credentials: 'include'
+      });
+    
+      return this.handleResponse(response);
+    }
+    finally {
+      this.setLoadingState(false);
+    }
   }
 
   // Método PUT
@@ -150,41 +177,56 @@ class ApiService {
   
     console.log('Fazendo requisição PUT para:', this.buildUrl(endpoint, addTenancy), 'com dados:', data);
 
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
-      method: 'PUT',
-      headers,
-      body: isFormData ? data : JSON.stringify(data),
-      credentials: 'include'
-    });
-  
-    return this.handleResponse(response);
+    try {
+      this.setLoadingState(true);
+      const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+        method: 'PUT',
+        headers,
+        body: isFormData ? data : JSON.stringify(data),
+        credentials: 'include'
+      });
+    
+      return this.handleResponse(response);
+    } finally {
+      this.setLoadingState(false);
+    }
   }
 
   // Método PATCH
   async patch<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
     console.log('Fazendo requisição PATCH para:', this.buildUrl(endpoint, addTenancy), 'com dados:', data);
     
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
-      method: 'PATCH',
-      headers: this.getHeaders(),
-      body: data ? JSON.stringify(data) : undefined,
-      credentials: 'include'
-    });
-    
-    return this.handleResponse(response);
+    try {
+      this.setLoadingState(true);
+      const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+        method: 'PATCH',
+        headers: this.getHeaders(),
+        body: data ? JSON.stringify(data) : undefined,
+        credentials: 'include'
+      });
+      
+      return this.handleResponse(response);
+    } finally {
+      this.setLoadingState(false);
+    }
   }
 
   // Método DELETE
   async delete<T>(endpoint: string, addTenancy: boolean = true): Promise<T> {
     console.log('Fazendo requisição DELETE para:', this.buildUrl(endpoint, addTenancy));
 
-    const response = await fetch(this.buildUrl(endpoint, addTenancy), {
-      method: 'DELETE',
-      headers: this.getHeaders(),
-      credentials: 'include'
-    });
-    
-    return this.handleResponse(response);
+    try {
+      this.setLoadingState(true);
+      const response = await fetch(this.buildUrl(endpoint, addTenancy), {
+        method: 'DELETE',
+        headers: this.getHeaders(),
+        credentials: 'include'
+      });
+      
+      return this.handleResponse(response);
+    } finally {
+      this.setLoadingState(false);
+    }
   }
 }
 

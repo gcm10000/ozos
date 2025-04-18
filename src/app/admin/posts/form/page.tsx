@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { postService } from '@/services/clientside';
 import ImageUploader from '@/components/ImageUploader';
+import buildUrl from '@/app/helpers/buildURL';
 
 const PostForm = () => {
   const { slug } = useParams();
@@ -48,6 +49,9 @@ const PostForm = () => {
             status: existingPost.status as string,
             categories: existingPost.categories || [],
           });
+
+          console.log("!!!!!!!!!!!!!!!!!!!! existingPost", existingPost);
+
           setOriginalImage(existingPost.image || '/placeholder.svg');
         } catch (error) {
           toast({
@@ -241,6 +245,15 @@ const PostForm = () => {
     'link', 'image'
   ];
 
+  // const imageUrl = useMemo(() => {
+  //   debugger;
+  //   const result = post.image !== '/placeholder.svg' ? buildUrl(post.image) : '/placeholder.svg';
+  //   console.log("<<<<<<<<<<<<<<<<<<<<<<<<<< result", result);
+  //   return result;
+  // }, [post.image]);
+
+  const imageUrl = post.image;
+
   return (
     <div>
       <Button
@@ -298,8 +311,7 @@ const PostForm = () => {
               required
             />
           </div>
-
-          <ImageUploader imageUrl={post.image} onImageChange={handleImageChange} />
+          <ImageUploader imageUrl={imageUrl} onImageChange={handleImageChange} />
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
