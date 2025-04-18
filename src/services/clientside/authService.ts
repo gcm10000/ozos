@@ -56,7 +56,7 @@ class AuthService {
       const refreshToken = Cookies.get('refresh_token');
       if (!refreshToken) return null;
   
-      const response = await apiService.post<RefreshTokenResponse>('/api/v1/auth/refresh', false, {
+      const response = await apiService.post<RefreshTokenResponse>('/v1/auth/refresh', false, {
         refresh_token: refreshToken
       });
   
@@ -68,7 +68,7 @@ class AuthService {
     }
   
     async changePassword(data: ChangePasswordRequest): Promise<ChangePasswordResponse> {
-      return apiService.post<ChangePasswordResponse>('/api/v1/auth/change-password', false, data);
+      return apiService.post<ChangePasswordResponse>('/auth/change-password', false, data);
     }
   
     logout(): void {

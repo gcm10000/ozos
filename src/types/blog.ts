@@ -22,7 +22,7 @@ export interface User {
   name: string;
   posts: number;
   email: string;
-  role: 'Administrator' | 'Author';
+  role: 'RootAdmin' | 'Administrator' | 'Author';
   createdAt: string;
   updatedAt: string;
   passwordChangeRequired: boolean;  // Adicionando a propriedade

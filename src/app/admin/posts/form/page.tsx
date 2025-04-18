@@ -49,8 +49,6 @@ const PostForm = () => {
             categories: existingPost.categories || [],
           });
 
-          console.log("!!!!!!!!!!!!!!!!!!!! existingPost", existingPost);
-
           // setOriginalImage(existingPost.image || '/placeholder.svg');
           setOriginalImage(existingPost.image || null);
         } catch (error) {

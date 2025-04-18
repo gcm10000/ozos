@@ -1,5 +1,7 @@
 
 export type PostStatus = 'draft' | 'published';
+export type Role = 'RootAdmin' | 'Administrator' | 'Author';
+
 
 export interface Post {
   id: number;
@@ -20,8 +22,8 @@ export interface User {
   id: number;
   username: string;
   name: string;
+  role: Role;
   email: string;
-  role: 'Administrator' | 'Author';
   createdAt: string;
   updatedAt: string;
 }

@@ -8,7 +8,6 @@ import FullScreenLoader from "@/components/FullScreenLoader";
 import ClientLayoutWrapper from "./client-layout-wrapper";
 
 export default async function AdminLayoutWrapper({ children }: { children: ReactNode }) {
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ada', 'chegou aqui!');
   const isAuth = await authService.isAuthenticated({ cookies });
   if (!isAuth) {
     redirect('/admin-login');
@@ -20,8 +19,6 @@ export default async function AdminLayoutWrapper({ children }: { children: React
     redirect('/admin-change-password');
   }
   
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ada', 'chegou aqui2222222222!');
-
   return (
   <>
     <AdminLayout>

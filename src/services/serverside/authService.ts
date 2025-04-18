@@ -36,7 +36,7 @@ export interface ChangePasswordResponse {
 
 class AuthService {
   login = async (credentials: LoginRequest, ctx?: any): Promise<LoginResponse> => {
-    const response = await apiService.post<LoginResponse>('/api/v1/auth/login', false, credentials);
+    const response = await apiService.post<LoginResponse>('/auth/login', false, credentials);
 
     const cookieStore = await cookies();
 

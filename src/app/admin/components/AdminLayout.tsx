@@ -1,19 +1,27 @@
-// app/admin/layout.tsx
-
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LayoutDashboard, FileText, Users, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, Users, Building, LogOut, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { authService } from '@/services/clientside';
+import { Role } from '@/app/types/blog';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< currentUser (client side)', user);
+    setCurrentUser(user);
+    setIsMounted(true);
+  }, []);
 
   const handleLogout = () => {
     authService.logout();
@@ -26,14 +34,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const navItems = [
-    { label: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/admin/dashboard' },
-    { label: 'Posts', icon: <FileText size={20} />, path: '/admin/posts' },
-    { label: 'Usuários', icon: <Users size={20} />, path: '/admin/users' }
+    { label: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/admin/dashboard', availableRoles: ['RootAdmin', 'Administrator', 'Author'] },
+    { label: 'Posts', icon: <FileText size={20} />, path: '/admin/posts', availableRoles: ['RootAdmin', 'Administrator', 'Author'] },
+    { label: 'Usuários', icon: <Users size={20} />, path: '/admin/users', availableRoles: ['RootAdmin', 'Administrator', 'Author'] },
+    { label: 'Inquilinos', icon: <Building size={20} />, path: '/admin/tenancies', availableRoles: ['RootAdmin'] }
   ];
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  if (!isMounted || !currentUser) {
+    // ou poderia exibir um spinner, skeleton, etc
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row">
@@ -58,17 +72,33 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav className="py-4">
           <ul>
             {navItems.map((item, index) => (
-              <li key={index}>
-                <Link
-                  href={item.path}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-ozos-blue transition-colors"
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                </Link>
-              </li>
+              item.availableRoles.includes(currentUser.role) && (
+                <li key={index}>
+                  <Link
+                    href={item.path}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-ozos-blue transition-colors"
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              )
             ))}
+
+            {/* Avatar Chip */}
+            <li className="px-4 py-3">
+              <div className="flex items-center gap-3 bg-ozos-blue/30 rounded-full px-3 py-2">
+                <div className="bg-white text-ozos-navy font-bold rounded-full w-8 h-8 flex items-center justify-center uppercase">
+                  {currentUser.name
+                    .split(' ')
+                    .map((n: string) => n[0])
+                    .slice(0, 2)
+                    .join('')}
+                </div>
+                <span className="text-sm">{currentUser.name}</span>
+              </div>
+            </li>
 
             <li>
               <button
@@ -80,6 +110,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </button>
             </li>
           </ul>
+
         </nav>
       </div>
 

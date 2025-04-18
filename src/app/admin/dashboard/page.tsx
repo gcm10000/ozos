@@ -150,12 +150,20 @@ export default async function Dashboard() {
                     <td className="py-3">{user.name}</td>
                     <td className="py-3 text-gray-600">{user.username}</td>
                     <td className="py-3">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        user.role === 'Administrator'
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-gray-100 text-gray-700'
-                      }`}>
-                        {user.role === 'Administrator' ? 'Administrador' : 'Autor'}
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${
+                          user.role === 'RootAdmin'
+                            ? 'bg-purple-100 text-purple-700'
+                            : user.role === 'Administrator'
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-gray-100 text-gray-700'
+                        }`}
+                      >
+                        {user.role === 'RootAdmin'
+                          ? 'Administrador Principal'
+                          : user.role === 'Administrator'
+                          ? 'Administrador'
+                          : 'Autor'}
                       </span>
                     </td>
                     <td className="py-3 text-right">
