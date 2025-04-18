@@ -14,7 +14,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { postService } from '@/services/clientside';
 import ImageUploader from '@/components/ImageUploader';
-import buildUrl from '@/app/helpers/buildURL';
 
 const PostForm = () => {
   const { slug } = useParams();
@@ -27,12 +26,12 @@ const PostForm = () => {
     title: '',
     excerpt: '',
     content: '',
-    image: '/placeholder.svg',
+    image: null as string | null,
     status: 'draft',
     categories: [] as string[]
   });
 
-  const [originalImage, setOriginalImage] = useState('');
+  const [originalImage, setOriginalImage] = useState<string | null>(null);
   const [categoryInput, setCategoryInput] = useState('');
   const [isHtmlMode, setIsHtmlMode] = useState(false);
 
@@ -45,14 +44,15 @@ const PostForm = () => {
             title: existingPost.title,
             excerpt: existingPost.excerpt,
             content: existingPost.content,
-            image: existingPost.image || '/placeholder.svg',
+            image: existingPost.image || null, // '/placeholder.svg',
             status: existingPost.status as string,
             categories: existingPost.categories || [],
           });
 
           console.log("!!!!!!!!!!!!!!!!!!!! existingPost", existingPost);
 
-          setOriginalImage(existingPost.image || '/placeholder.svg');
+          // setOriginalImage(existingPost.image || '/placeholder.svg');
+          setOriginalImage(existingPost.image || null);
         } catch (error) {
           toast({
             title: "Erro ao carregar post",
@@ -108,6 +108,9 @@ const PostForm = () => {
     }
   
     if (!isEditing || post.image !== originalImage) {
+      if (post.image === null)
+        return formData;
+
       if (post.image.startsWith('http')) {
         // Se for uma URL de imagem, envia a URL
         formData.append('ImageUrl', post.image);
@@ -245,13 +248,6 @@ const PostForm = () => {
     'link', 'image'
   ];
 
-  // const imageUrl = useMemo(() => {
-  //   debugger;
-  //   const result = post.image !== '/placeholder.svg' ? buildUrl(post.image) : '/placeholder.svg';
-  //   console.log("<<<<<<<<<<<<<<<<<<<<<<<<<< result", result);
-  //   return result;
-  // }, [post.image]);
-
   const imageUrl = post.image;
 
   return (
@@ -311,7 +307,7 @@ const PostForm = () => {
               required
             />
           </div>
-          <ImageUploader imageUrl={imageUrl} onImageChange={handleImageChange} />
+          <ImageUploader imageUrl={imageUrl || '/placeholder.svg'} onImageChange={handleImageChange} />
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
