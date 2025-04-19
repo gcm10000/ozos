@@ -25,5 +25,6 @@ export interface User {
   role: 'RootAdmin' | 'Administrator' | 'Author';
   createdAt: string;
   updatedAt: string;
+  isMainTenancy: boolean;
   passwordChangeRequired: boolean;  // Adicionando a propriedade
 }

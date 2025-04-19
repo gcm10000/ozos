@@ -28,6 +28,7 @@ import { useEffect, useState } from 'react';
 import { useLoadingStore } from '@/stores/useLoadingStore';
 import { apiService } from '@/services/clientside';
 import FullScreenLoader from '@/components/FullScreenLoader';
+import { toast, Toaster } from 'sonner';
 
 export default function ClientLayoutWrapper({ children }: { children: React.ReactNode }) {
   const isLoading = useLoadingStore((s) => s.isLoading);
@@ -42,12 +43,17 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
     return () => clearTimeout(timer);
   }, [setLoading]);
 
+  useEffect(() => {
+    apiService.setToastHandler((msg) => toast.error(msg));
+  }, []);
+
   const shouldShowLoader = isLoading || forceLoading;
 
   return (
     <>
       {shouldShowLoader && <FullScreenLoader />}
       {children}
+      <Toaster richColors duration={4000} />
     </>
   );
 }

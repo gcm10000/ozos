@@ -1,6 +1,7 @@
 import { API_CONFIG } from '@/config/api';
 import Cookies from 'js-cookie';  // Importa a biblioteca cookie-js
 import { useLoadingStore } from '@/stores/useLoadingStore';
+import { toast } from 'sonner';
 
 
 class ApiError extends Error {
@@ -16,12 +17,14 @@ class ApiError extends Error {
 }
 
 type LoadingCallback = (loading: boolean) => void;
+type ToastFunction = (message: string) => void;
 
 // Classe base para requisições HTTP
 class ApiService {
   private baseURL: string;
   private defaultHeaders: Record<string, string>;
   private loadingCallback?: LoadingCallback;
+  private showToast?: ToastFunction;
 
   setLoadingCallback(callback: LoadingCallback) {
     this.loadingCallback = callback;
@@ -32,6 +35,15 @@ class ApiService {
       this.loadingCallback(state);
     }
   }
+
+  setToastHandler(fn: ToastFunction) {
+    this.showToast = fn;
+  }
+
+  private notify(message: string) {
+    if (this.showToast) this.showToast(message);
+  }
+
 
   constructor() {
     this.baseURL = API_CONFIG.baseURL;
@@ -82,14 +94,15 @@ class ApiService {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error('Erro na requisição:', response.status, errorData);
+      this.notify(errorData.message || 'Erro na requisição');
+    
       throw new ApiError(
         errorData.message || `Erro na requisição: ${response.status}`,
         response.status,
         errorData
       );
     }
-    
+        
     if (response.status === 204) {
       console.log('Resposta 204 - No Content');
       return {};

@@ -156,6 +156,7 @@ const TenancyForm = () => {
             <label htmlFor="mainAdministratorEmail" className="block text-sm font-medium text-gray-700 mb-1">
               Administrador Principal*
             </label>
+          {isEditing && 
             <Select value={tenancy.mainAdministratorEmail} onValueChange={handleSelectEmail}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Selecione um usuário" />
@@ -168,8 +169,19 @@ const TenancyForm = () => {
                 ))}
               </SelectContent>
             </Select>
+        }
+        {!isEditing &&
+            <Input
+                id="mainAdministratorEmail"
+                name="mainAdministratorEmail"
+                type="email"
+                value={tenancy.mainAdministratorEmail}
+                onChange={handleChange}
+                placeholder="Email do administrador principal"
+                required
+            />
+        }
           </div>
-
           <div>
             <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
               Url*

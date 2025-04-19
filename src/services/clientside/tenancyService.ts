@@ -9,6 +9,7 @@ export interface Tenancy {
   url: string;
   createdAt: string;
   updatedAt: string;
+  isMainTenancy: boolean;
 }
 
 export interface TenancyListParams {

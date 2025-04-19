@@ -22,13 +22,13 @@ export interface CreateUserRequest {
   name: string;
   email: string;
   password: string;
-  role: 'Administrator' | 'Author';
+  role: 'Administrator' | 'Author' | 'RootAdmin';
 }
 
 export interface UpdateUserRequest {
   name?: string;
   email?: string;
-  role?: 'Administrator' | 'Author';
+  role?: 'Administrator' | 'Author' | 'RootAdmin';
 }
 
 export interface DeleteUserResponse {

@@ -74,7 +74,7 @@ class ApiService {
     return clientId.value;
   }
 
-  private async handleResponse(response: Response): Promise<any> {
+  private async handleResponse(response: Response, url: string): Promise<any> {
     console.log("Resposta recebida:", response.status);
     
     if (!response.ok) {
@@ -92,7 +92,7 @@ class ApiService {
         redirect('/403');
       }
 
-      console.error("Erro na requisição:", errorData);
+      console.error(`Erro na requisição (${url}):`, errorData);
       throw new ApiError(
         errorData.message || `Erro na requisição: ${response.status}`,
         response.status,
@@ -107,7 +107,7 @@ class ApiService {
 
     try {
       const data = await response.json();
-      console.log("Dados retornados:", data);
+      console.log(`Dados retornados: (${url})`, data);
       return data;
     } catch (error) {
       const text = await response.text();
@@ -138,7 +138,7 @@ class ApiService {
       credentials: 'include'
     });
 
-    return this.handleResponse(response);
+    return this.handleResponse(response, url);
   }
 
   async post<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
@@ -155,7 +155,7 @@ class ApiService {
       credentials: 'include'
     });
 
-    return this.handleResponse(response);
+    return this.handleResponse(response, url);
   }
 
   async put<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
@@ -172,7 +172,7 @@ class ApiService {
       credentials: 'include'
     });
 
-    return this.handleResponse(response);
+    return this.handleResponse(response, url);
   }
 
   async patch<T>(endpoint: string, addTenancy: boolean = true, data?: any): Promise<T> {
@@ -189,7 +189,7 @@ class ApiService {
       credentials: 'include'
     });
 
-    return this.handleResponse(response);
+    return this.handleResponse(response, url);
   }
 
   async delete<T>(endpoint: string, addTenancy: boolean = true): Promise<T> {
@@ -204,7 +204,7 @@ class ApiService {
       credentials: 'include'
     });
 
-    return this.handleResponse(response);
+    return this.handleResponse(response, url);
   }
 }
 

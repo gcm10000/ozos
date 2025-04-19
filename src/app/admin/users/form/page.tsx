@@ -20,7 +20,7 @@ const UserForm = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'Author' as 'Administrator' | 'Author'
+    role: 'Author' as 'Administrator' | 'Author' | 'RootAdmin'
   });
 
   useEffect(() => {
