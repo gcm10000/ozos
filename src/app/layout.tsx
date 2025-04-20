@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { API_CONFIG } from "@/config/api";
 
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -19,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Ozos",
   description: "Experts em criação de sites. Ajudamos empresas e profissionais a exibir seu trabalho com sites de portfólio modernos, responsivos e tecnologicamente avançados.",
+  icons: {
+    icon: '/favicon.ico'
+  }
 };
 
 export default function RootLayout({
