@@ -5,6 +5,8 @@ import { apiService } from './apiService';
 export interface Tenancy {
   id: number;
   name: string;
+  mainAdministratorEmail: string;
+  apiKeyDefaultKey: string;
   url: string;
   createdAt: string;
   updatedAt: string;

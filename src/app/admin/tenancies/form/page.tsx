@@ -16,11 +16,21 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Tenancy } from '@/services/serverside';
+
 const TenancyForm = () => {
   const { slug } = useParams();
   const isEditing = !!slug;
   const router = useRouter();
   const { toast } = useToast();
+  const [createTenancyResponse, setCreateTenancyResponse] = useState<Tenancy | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [tenancy, setTenancy] = useState({
@@ -96,7 +106,8 @@ const TenancyForm = () => {
       if (isEditing) {
         await tenancyService.updateTenancy(Number(slug), tenancy);
       } else {
-        await tenancyService.createTenancy(tenancy);
+        const createTenancyResponse = await tenancyService.createTenancy(tenancy);
+        setCreateTenancyResponse(createTenancyResponse);
       }
 
       toast({
@@ -105,9 +116,6 @@ const TenancyForm = () => {
           ? 'O inquilino foi atualizado com sucesso'
           : 'O inquilino foi criado com sucesso'
       });
-
-      router.push('/admin/tenancies');
-
     } catch (error: any) {
       toast({
         title: 'Erro',
@@ -195,6 +203,57 @@ const TenancyForm = () => {
               required
             />
           </div>
+          
+        <Dialog open={!!createTenancyResponse}>
+          <DialogContent 
+            className="[&>button]:hidden w-full max-w-md sm:max-w-lg mx-auto overflow-y-auto p-6 sm:p-8">
+            <DialogHeader className="relative">
+              <DialogTitle>Novo inquilino foi criado com sucesso</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-8 text-sm">
+              <div className="space-y-2 text-sm">
+                <p>
+                  <strong>Id:</strong>
+                </p>
+                <p className='break-all'>
+                  {createTenancyResponse?.id}
+                </p>
+                <p>
+                  <strong>Nome:</strong>
+                </p>
+                <p className='break-all'>
+                  {createTenancyResponse?.name}
+                </p>
+                <p>
+                  <strong>Email do Principal Administrador:</strong>
+                </p>
+                <p className='break-all'>
+                  {createTenancyResponse?.mainAdministratorEmail}
+                </p>
+                <p>
+                  <strong>Chave Padrão de Acesso:</strong>
+                </p>
+                <p className='break-all'>
+                  {createTenancyResponse?.apiKeyDefaultKey}
+                </p>
+              </div>
+              <p className="text-black text-muted-foreground mt-4">
+                Copie e salve agora. Esta chave <strong>não será exibida novamente</strong>.
+              </p>
+            </div>
+            <DialogFooter className="pt-4">
+              <Button
+                onClick={() => {
+                  // setGeneratedKey(null);
+                  router.push('/admin/tenancies');
+                }}
+              >
+                Entendido
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+          
 
           <div className="pt-4">
             <Button 
