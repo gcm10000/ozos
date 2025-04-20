@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { postService } from '@/services/serverside';
 import buildUrl from '@/app/helpers/buildURL';
+import { publicPostService } from '@/services/serverside/publicPostService';
 
 interface BlogPostPageProps {
   params: {
@@ -16,7 +17,7 @@ interface BlogPostPageProps {
 export default async function BlogPost({ params }: BlogPostPageProps) {
   
   const { slug } = await params;
-  const post = await postService.getPostBySlug(slug);
+  const post = await publicPostService.getPostBySlug(slug);
   const imageUrl = buildUrl(post.image);
   console.log(post);
   if (!post) {
