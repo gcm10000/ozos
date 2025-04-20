@@ -1,5 +1,5 @@
 "use server"
-import { FilePenLine, Eye, Trash2, PlusCircle, Search } from 'lucide-react';
+import { FilePenLine, Eye, Trash2, PlusCircle, Search, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
@@ -25,6 +25,13 @@ const PostList = async ({ searchParams }: PostListProps) => {
     search: search.toLowerCase(), 
     status: status === 'all' ? undefined : status  
   });
+
+  function ensureHttpScheme(url: string): string {
+    if (!/^https?:\/\//i.test(url)) {
+      return `http://${url}`;
+    }
+    return url;
+  }  
 
   return (
     <div>
@@ -106,6 +113,11 @@ const PostList = async ({ searchParams }: PostListProps) => {
                         <Button variant="ghost" size="icon" asChild>
                           <Link href={`/admin/posts/${post.id}`}>
                             <Eye size={16} />
+                          </Link>
+                        </Button>
+                        <Button variant="ghost" size="icon" asChild>
+                          <Link href={ensureHttpScheme(post.externalLink)} target='_blank'>
+                            <ExternalLink size={16} />
                           </Link>
                         </Button>
                         <DeletePostButton id={post.id} />

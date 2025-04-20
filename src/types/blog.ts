@@ -8,6 +8,7 @@ export interface Post {
   slug: string;
   image: string;
   author: string;
+  externalLink: string;
   authorId: number;
   categories: string[];
   date: string;
