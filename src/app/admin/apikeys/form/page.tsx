@@ -118,6 +118,8 @@ export default function ApiKeyForm() {
                 disabled={isEditing}
               />
               <span style={{ userSelect: 'none' }}>{scope.name}</span>
+              <span style={{ userSelect: 'none' }}>{scope.verb}</span>
+              <span style={{ userSelect: 'none' }}>{scope.endpoint}</span>
             </label>
           ))}
         </div>

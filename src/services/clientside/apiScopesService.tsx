@@ -5,6 +5,8 @@ import { apiService } from './apiService';
 export interface ApiScopeDto {
   id: number;
   name: string;
+  verb: string;
+  endpoint: string;
 }
 
 export class ApiScopesService {
