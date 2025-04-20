@@ -6,6 +6,7 @@ import { Search, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { postService } from '@/services/serverside';
 import buildUrl from '../helpers/buildURL';
+import { publicPostService } from '@/services/serverside/publicPostService';
 
 interface BlogPageProps {
   searchParams: {
@@ -20,7 +21,8 @@ async function fetchPosts(search?: string) {
     console.log("Iniciando requisição para obter os posts...");
     
     // Faz a requisição ao serviço de posts
-    const response = await postService.getPublicPosts({ search });
+    const response = await publicPostService.getPublicPosts({ search });
+    // const response = await postService.getPublicPosts({ search });
 
     console.log("Posts recebidos com sucesso:", response.data);
 

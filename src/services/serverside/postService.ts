@@ -1,5 +1,5 @@
 
-import { BlogApiTenancyId } from '@/config/api';
+import { API_CONFIG } from '@/config/api';
 import { apiService } from './apiService';
 import { Post, PostStatus } from '@/types/blog';
 
@@ -65,7 +65,7 @@ class PostService {
    * Obtém a lista de posts com paginação e filtros
    */
   async getPublicPosts(params?: PostListParams): Promise<PostListResponse> {
-    return apiService.get<PostListResponse>(`/${BlogApiTenancyId}/posts`, false, params);
+    return apiService.get<PostListResponse>(`/${API_CONFIG.tenancyId}/posts`, false, params);
   }
 
   /**
