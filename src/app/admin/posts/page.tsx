@@ -115,11 +115,17 @@ const PostList = async ({ searchParams }: PostListProps) => {
                             <Eye size={16} />
                           </Link>
                         </Button>
+                        {post.status === 'published' ? (
                         <Button variant="ghost" size="icon" asChild>
-                          <Link href={ensureHttpScheme(post.externalLink)} target='_blank'>
+                          <Link href={ensureHttpScheme(post.externalLink)} target="_blank">
                             <ExternalLink size={16} />
                           </Link>
                         </Button>
+                      ) : (
+                        <Button variant="ghost" size="icon" disabled>
+                          <ExternalLink size={16} />
+                        </Button>
+                      )}
                         <DeletePostButton id={post.id} />
                       </div>
                     </td>
