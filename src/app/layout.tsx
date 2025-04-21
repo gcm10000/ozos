@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { API_CONFIG } from "@/config/api";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,8 @@ export default function RootLayout({
         {!!API_CONFIG.googleAnalyticsId &&
           <GoogleAnalytics gaId={API_CONFIG.googleAnalyticsId} />
         }
-      </body>
+        <WhatsAppButton />
+    </body>
     </html>
   );
 }
