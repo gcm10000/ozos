@@ -9,7 +9,7 @@ async function getDynamicRoutes() {
     // Exemplo: const posts = await prisma.post.findMany()
     const posts = await publicPostService.getPublicPosts({ page: 1, limit: 99999});
   
-    return posts.data.map((post: any) => post.slug); // ['como-usar-next', 'dicas-de-dev']
+    return posts.data.map((post: any) => `blog/${post.slug}`); // ['como-usar-next', 'dicas-de-dev']
   }
 
 // app/sitemap.xml/route.ts
@@ -41,7 +41,7 @@ export async function GET() {
       
 
     // Exemplo de rotas estáticas e dinâmicas
-    const staticRoutes = ['/'];
+    const staticRoutes = [''];
     const dynamicRoutes = await getDynamicRoutes(); // pode vir do banco, CMS etc
   
     const allRoutes = [...staticRoutes, ...dynamicRoutes].map(route => {
