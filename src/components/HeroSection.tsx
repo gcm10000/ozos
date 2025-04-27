@@ -28,7 +28,7 @@ const HeroSection = () => {
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="reveal text-4xl font-bold tracking-tight text-ozos-navy sm:text-5xl md:text-6xl">
-            Criando <span className="text-ozos-blue">Incríveis</span> Sites de Portfólio
+            Criando Sites <span className="text-ozos-blue">Incríveis</span> de Portfólio
           </h1>
           <p className="reveal mt-6 text-lg text-gray-600 md:text-xl">
             Ajudamos empresas e profissionais a exibir seu trabalho com sites de portfólio modernos, responsivos e tecnologicamente avançados.
